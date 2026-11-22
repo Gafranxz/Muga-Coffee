@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /status.php
+Disallow: /pay.php
+Disallow: /cs.php
+Disallow: /order.php
+Sitemap: /sitemap.php

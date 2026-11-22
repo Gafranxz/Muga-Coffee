@@ -1,0 +1,3 @@
+uploads/*
+!uploads/.htaccess
+inc/config.local.php
