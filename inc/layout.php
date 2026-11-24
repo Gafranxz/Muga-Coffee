@@ -54,7 +54,7 @@ function site_footer(): void { ?>
 <footer class="site-footer">
   <p class="foot-brand">MUGA<span>KOPI</span></p>
   <p>Coffee is always better when shared with the people you love.</p>
-  <p class="foot-small">&copy; <?= date('Y') ?> Muga Kopi &middot; Proyek PjBL Desain dan Pemrograman Web, D4 TKJ PNUP &middot; <a href="<?= e(url('admin/login.php')) ?>">Masuk kasir</a></p>
+  <p class="foot-small">&copy; <?= date('Y') ?> Muga Kopi &middot; <a href="<?= e(url('admin/login.php')) ?>">Masuk kasir</a></p>
 </footer>
 <?php }
 

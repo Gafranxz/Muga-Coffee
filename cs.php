@@ -40,11 +40,23 @@ $hist[] = ['role' => 'user', 'content' => $q];
 $hist = array_slice($hist, -6);
 if ($hist[0]['role'] !== 'user') array_shift($hist);
 
-[$http, $d] = http_json('POST', AI_API_URL, ['x-api-key: ' . AI_API_KEY, 'anthropic-version: 2023-06-01'], [
-    'model' => AI_MODEL, 'max_tokens' => 350, 'system' => $system, 'messages' => $hist,
-]);
-$reply = '';
-foreach (($d['content'] ?? []) as $b) if (($b['type'] ?? '') === 'text') $reply .= $b['text'];
+if (AI_PROVIDER === 'gemini') {
+    // Google Gemini (paket gratis di Google AI Studio). Peran asisten disebut "model".
+    $contents = array_map(fn($m) => ['role' => $m['role'] === 'assistant' ? 'model' : 'user', 'parts' => [['text' => $m['content']]]], $hist);
+    [$http, $d] = http_json('POST', rtrim(AI_API_URL, '/') . '/' . AI_MODEL . ':generateContent', ['x-goog-api-key: ' . AI_API_KEY], [
+        'system_instruction' => ['parts' => [['text' => $system]]],
+        'contents' => $contents,
+        'generationConfig' => ['maxOutputTokens' => 400, 'temperature' => 0.4],
+    ]);
+    $reply = '';
+    foreach (($d['candidates'][0]['content']['parts'] ?? []) as $b) $reply .= $b['text'] ?? '';
+} else {
+    [$http, $d] = http_json('POST', AI_API_URL, ['x-api-key: ' . AI_API_KEY, 'anthropic-version: 2023-06-01'], [
+        'model' => AI_MODEL, 'max_tokens' => 350, 'system' => $system, 'messages' => $hist,
+    ]);
+    $reply = '';
+    foreach (($d['content'] ?? []) as $b) if (($b['type'] ?? '') === 'text') $reply .= $b['text'];
+}
 if ($http !== 200 || trim($reply) === '') out('Maaf, asisten sedang tidak bisa menjawab. Coba lagi atau tanya kasir.', 502);
 
 $hist[] = ['role' => 'assistant', 'content' => $reply];

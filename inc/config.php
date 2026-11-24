@@ -20,7 +20,8 @@ $def('MIDTRANS_CLIENT_KEY', '');
 $def('MIDTRANS_SNAP_JS', 'https://app.sandbox.midtrans.com/snap/snap.js');
 $def('MIDTRANS_SNAP_API', 'https://app.sandbox.midtrans.com/snap/v1/transactions');
 $def('MIDTRANS_STATUS_API', 'https://api.sandbox.midtrans.com/v2');
-// CS berbasis AI (Anthropic Messages API). Isi AI_API_KEY di config.local.php.
+// CS berbasis AI (Gemini gratis atau Anthropic). Isi AI_API_KEY di config.local.php.
 $def('AI_API_KEY', '');
-$def('AI_API_URL', 'https://api.anthropic.com/v1/messages');
-$def('AI_MODEL', 'claude-haiku-5-5');
+$def('AI_PROVIDER', 'gemini');   // 'gemini' (gratis) atau 'anthropic' (berbayar)
+$def('AI_API_URL', AI_PROVIDER === 'gemini' ? 'https://generativelanguage.googleapis.com/v1beta/models' : 'https://api.anthropic.com/v1/messages');
+$def('AI_MODEL', AI_PROVIDER === 'gemini' ? 'gemini-2.5-flash' : 'claude-haiku-5-5');
